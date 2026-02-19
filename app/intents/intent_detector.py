@@ -14,7 +14,7 @@ Goals:
 # IMPORTS
 # =========================
 
-from typing import Tuple, Optional
+from typing import Any, Tuple, Optional
 
 # =========================
 # EMERGENCY & HUMAN OVERRIDES
@@ -114,7 +114,7 @@ MAX_KEYWORDS_PER_INTENT = 3  # used for confidence normalization
 # MAIN FUNCTION
 # =========================
 
-def detect_intent(transcript: str) -> Tuple[Optional[str], float]:
+def detect_intent(transcript: Any) -> Tuple[Optional[str], float]:
     """
     Detect intent from STT transcript using keyword + rules.
 
@@ -125,9 +125,18 @@ def detect_intent(transcript: str) -> Tuple[Optional[str], float]:
     """
 
     # -------------------------
-    # 1. Normalize input text
+    # 1. Validate & normalize input text
     # -------------------------
+    if transcript is None:
+        return None, 0.0
+
+    if not isinstance(transcript, str):
+        return None, 0.0
+
     text = transcript.lower().strip()
+
+    if not text:
+        return None, 0.0
 
     # -------------------------
     # 2. Emergency override
