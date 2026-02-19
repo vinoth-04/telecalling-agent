@@ -1,16 +1,21 @@
+import unittest
+
 from app.intents.intent_detector import detect_intent
 
-def run_test(text):
-    intent, confidence = detect_intent(text)
-    print(f"INPUT     : {text}")
-    print(f"INTENT    : {intent}")
-    print(f"CONFIDENCE: {confidence}")
-    print("-" * 40)
+
+class TestDetectIntentInvalidInputs(unittest.TestCase):
+    def test_none_input_returns_no_intent(self):
+        self.assertEqual(detect_intent(None), (None, 0.0))
+
+    def test_empty_string_returns_no_intent(self):
+        self.assertEqual(detect_intent(""), (None, 0.0))
+
+    def test_whitespace_only_string_returns_no_intent(self):
+        self.assertEqual(detect_intent("   \t\n  "), (None, 0.0))
+
+    def test_non_string_input_returns_no_intent(self):
+        self.assertEqual(detect_intent(123), (None, 0.0))
+
 
 if __name__ == "__main__":
-    run_test("I want to book a new appointment")
-    run_test("Can you reschedule my appointment")
-    run_test("What time do you open")
-    run_test("My tooth is bleeding badly")
-    run_test("I want to talk to a human agent")
-    run_test("I have a question")
+    unittest.main()
